@@ -59,7 +59,7 @@ Ollama is used to run the LLM models locally.
 ### Running the Flask App
 
 ```bash
-flask run
+python app.py
 ```
 
 ## Example: Submitting a Resume for Review via cURL
