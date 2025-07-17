@@ -26,7 +26,7 @@ def build_ollama_payload(resume_text):
                 '{"strengths": ["strength1", "strength2"], "weaknesses": ["weakness1", "weakness2"],'
                 '"suggestions": [{"type": "improvement", "description": "specific actionable advice"}]}'
                 "Focus on: technical skills, project impact, leadership, and resume presentation."
-                "Be specific and actionable. Keep total response under 2000 characters."
+                "Be specific and actionable."
             )
         },
         {
@@ -84,7 +84,7 @@ def review_resume():
   ollama_response = call_ollama_api(payload)
   if not ollama_response:
     return jsonify({"error": "Failed to get response from OLLAMA API"}), 500
-  return jsonify(ollama_response)
+  return ollama_response
 
 if __name__ == "__main__":
   app.run(port=FLASK_PORT, debug=True)
