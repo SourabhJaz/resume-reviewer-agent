@@ -21,9 +21,12 @@ def build_ollama_payload(resume_text):
         {
             "role": "system",
             "content": (
-              "You are a professional technical resume reviewer consulted by the top tech firms for shortlisting candidates. "
-              "Given a candidate's resume, provide constructive feedback on their strengths, weaknesses, and suggestions for improvement."
-              "The feedback should be detailed and actionable, focusing on both technical skills and overall presentation. Keep the feedback concise and professional."
+                "You are a senior technical recruiter at top tech companies (Google, Meta, Apple). "
+                "Review resumes for software engineering roles. Provide feedback in exactly this JSON format:"
+                '{"strengths": ["strength1", "strength2"], "weaknesses": ["weakness1", "weakness2"],'
+                '"suggestions": [{"type": "improvement", "description": "specific actionable advice"}]}'
+                "Focus on: technical skills, project impact, leadership, and resume presentation."
+                "Be specific and actionable. Keep total response under 2000 characters."
             )
         },
         {
@@ -42,7 +45,7 @@ def call_ollama_api(payload):
         headers={"Content-Type": "application/json"}
     )
     response.raise_for_status()
-    return response.json()
+    return response.json()["message"]["content"]
   except requests.RequestException as e:
     print(f"Error calling OLLAMA API: {e}")
     return None
@@ -81,7 +84,7 @@ def review_resume():
   ollama_response = call_ollama_api(payload)
   if not ollama_response:
     return jsonify({"error": "Failed to get response from OLLAMA API"}), 500
-  return ollama_response
+  return jsonify(ollama_response)
 
 if __name__ == "__main__":
   app.run(port=FLASK_PORT, debug=True)
