@@ -1,0 +1,8 @@
+Recruiters at top tech firms prioritize the following:
+- Clarity and conciseness in job descriptions.
+- Evidence of impact through quantifiable metrics (e.g., “reduced latency by 40%”).
+- Clear ownership: use of “I” vs “we” when discussing individual contributions.
+- Technical depth: mention of architecture, tech stacks, tools, and design choices.
+- Progression: roles should show increasing scope or impact over time.
+- Leadership signals: mentoring, technical decision-making, cross-functional collaboration.
+- Communication and presentation: avoid dense blocks of text; use bullet points effectively.

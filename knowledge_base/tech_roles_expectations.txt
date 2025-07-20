@@ -1,0 +1,9 @@
+For software engineering roles:
+- Emphasize technical systems built or scaled.
+- Include tools and technologies used (e.g., Python, Kubernetes, AWS).
+- Highlight architectural patterns (e.g., event-driven systems, microservices).
+- Mention code quality practices: testing, CI/CD, code reviews.
+- Include performance/efficiency metrics where possible (e.g., “handled 100K QPS”).
+- If applying to backend roles: show database schema design, API development.
+- For frontend roles: focus on UX, performance, accessibility.
+- For ML roles: show data pipeline design, model evaluation, and deployment.

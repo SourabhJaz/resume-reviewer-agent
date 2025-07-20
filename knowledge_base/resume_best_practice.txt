@@ -1,0 +1,8 @@
+Best practices for technical resumes:
+- Keep it to 1 page for <10 years experience; 2 pages max otherwise.
+- Use active verbs: Designed, Led, Optimized, Reduced, Implemented.
+- Every bullet should reflect impact or outcome, not just tasks.
+- Avoid generic claims like “team player” or “problem solver” without examples.
+- Consistency matters: use the same formatting, font, and tense throughout.
+- Use reverse chronological format for experience.
+- Include GitHub, portfolio, or LinkedIn only if well-maintained.

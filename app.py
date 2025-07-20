@@ -3,25 +3,60 @@ import requests
 import pdfplumber
 from flask import Flask, json, request, jsonify
 from dotenv import load_dotenv
+import chromadb
+from sentence_transformers import SentenceTransformer
+
 
 load_dotenv()
 OLLAMA_API_BASE = os.getenv("OLLAMA_API_BASE")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL")
 FLASK_PORT = int(os.getenv("FLASK_PORT"))
 
+app = Flask(__name__)
+
 temp_dir = os.path.join(os.path.dirname(__file__), 'temp_files')
 os.makedirs(temp_dir, exist_ok=True)
 
-app = Flask(__name__)
+# --- Load embedding model ---
+embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
-def build_ollama_payload(resume_text):
+# --- Load ChromaDB ---
+chroma_client = chromadb.Client()
+collection = chroma_client.get_or_create_collection("resume_guidance")
+
+def load_knowledge_base():
+  knowledge_base_path = os.path.join(os.path.dirname(__file__), 'knowledge_base')
+  for filename in os.listdir(knowledge_base_path):
+    if filename.endswith('.txt'):
+      path = os.path.join(knowledge_base_path, filename)
+      with open(path, 'r', encoding='utf-8') as file:
+        content = file.read()
+        embedding = embedding_model.encode(content).tolist()
+        collection.add(
+            documents=[content],
+            embeddings=[embedding],
+            ids=[filename]
+        )
+  print(f"Knowledge base loaded with {len(collection.get()['ids'])} entries.")
+
+def retrieve_relevant_context(resume_text, top_k=3):
+  resume_embedding = embedding_model.encode(resume_text).tolist()
+  results = collection.query(
+      query_embeddings=[resume_embedding],
+      n_results=top_k
+  )
+  contexts = results['documents'][0]
+  return "\n\n".join(contexts)
+
+def build_ollama_payload(resume_text, rag_context):
   return {
     "model": OLLAMA_MODEL,
     "messages": [
         {
             "role": "system",
             "content": (
-                "You are a senior technical recruiter at top tech companies (Google, Meta, Apple). "
+                "You are a senior technical recruiter. Review the resume considering best practices "
+                "and the following guidelines:\n\n"
                 "Review resumes for software engineering roles. Provide feedback in exactly this JSON format:"
                 '{"strengths": ["strength1", "strength2"], "weaknesses": ["weakness1", "weakness2"],'
                 '"suggestions": [{"type": "improvement", "description": "specific actionable advice"}]}'
@@ -80,11 +115,15 @@ def review_resume():
   print(f"Extracted text from PDF: {resume_text[:250]}...")
   os.remove(temp_path)
 
-  payload = build_ollama_payload(resume_text)
+  rag_context = retrieve_relevant_context(resume_text)
+  payload = build_ollama_payload(resume_text, rag_context)
   ollama_response = call_ollama_api(payload)
   if not ollama_response:
     return jsonify({"error": "Failed to get response from OLLAMA API"}), 500
   return ollama_response
+
+# --- Load KB once ---
+load_knowledge_base()
 
 if __name__ == "__main__":
   app.run(port=FLASK_PORT, debug=True)
