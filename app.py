@@ -40,6 +40,9 @@ def load_knowledge_base():
   print(f"Knowledge base loaded with {len(collection.get()['ids'])} entries.")
 
 def retrieve_relevant_context(resume_text, top_k=3):
+  if not collection.count():
+    print("Knowledge base is empty. Loading...")
+    load_knowledge_base()
   resume_embedding = embedding_model.encode(resume_text).tolist()
   results = collection.query(
       query_embeddings=[resume_embedding],
@@ -120,9 +123,6 @@ def review_resume():
   if not ollama_response:
     return jsonify({"error": "Failed to get response from OLLAMA API"}), 500
   return ollama_response
-
-# --- Load KB once ---
-load_knowledge_base()
 
 if __name__ == "__main__":
   app.run(port=FLASK_PORT, debug=True)
