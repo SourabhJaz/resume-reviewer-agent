@@ -57,11 +57,10 @@ def build_ollama_payload(resume_text, rag_context):
             "content": (
                 "You are a senior technical recruiter. Review the resume considering best practices "
                 "and the following guidelines:\n\n"
-                "Review resumes for software engineering roles. Provide feedback in exactly this JSON format:"
+                f"{rag_context}\n\n"
+                "Provide feedback in exactly this JSON format:"
                 '{"strengths": ["strength1", "strength2"], "weaknesses": ["weakness1", "weakness2"],'
                 '"suggestions": [{"type": "improvement", "description": "specific actionable advice"}]}'
-                "Focus on: technical skills, project impact, leadership, and resume presentation."
-                "Be specific and actionable."
             )
         },
         {

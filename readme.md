@@ -1,6 +1,6 @@
 # Resume Reviewer Agent
 
-A Flask-based application for automated resume review using LLMs. This project extracts text from uploaded PDF resumes and provides structured feedback on strengths, weaknesses, and suggestions.
+A Flask-based application for automated resume review using LLMs and Retrieval-Augmented Generation (RAG). This project extracts text from uploaded PDF resumes, retrieves relevant information from a knowledge base, and provides structured feedback on strengths, weaknesses, and suggestions.
 
 ## Getting Started
 
