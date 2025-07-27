@@ -18,9 +18,12 @@ temp_dir = os.path.join(os.path.dirname(__file__), 'temp_files')
 os.makedirs(temp_dir, exist_ok=True)
 
 # --- Load embedding model ---
+# To convert raw text into embeddings for RAG.
+# all-MiniLM-L6-v2 is a lightweight model suitable for this task.
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
 # --- Load ChromaDB ---
+# To store and query knowledge_base entries embeddings
 chroma_client = chromadb.Client()
 collection = chroma_client.get_or_create_collection("resume_guidance")
 
